@@ -1,0 +1,41 @@
+{
+  "note": "Sequence rendered from the cooperative's high-resolution craft photography. The supplied pitch clip (IMG_9228.MP4) is a 640x360 screen recording of an investor slide deck and is embedded separately rather than used as footage.",
+  "shots": [
+    "IMG_9233.JPG",
+    "IMG_9231.JPG",
+    "IMG_9229.JPG",
+    "IMG_9236.JPG",
+    "IMG_9238.JPG",
+    "IMG_9233.JPG"
+  ],
+  "frames": {
+    "count": 104,
+    "format": "webp"
+  },
+  "chapter_centers": [
+    0.045,
+    0.215,
+    0.39,
+    0.565,
+    0.742,
+    0.925
+  ],
+  "shot_boundaries": [
+    0.13,
+    0.3025,
+    0.4775,
+    0.6535,
+    0.8335
+  ],
+  "recommended_scroll_height": "720vh",
+  "desktop": {
+    "resolution": "1200x675",
+    "count": 104,
+    "total_mb": 10.14
+  },
+  "mobile": {
+    "resolution": "680x383",
+    "count": 104,
+    "total_mb": 4.12
+  }
+}

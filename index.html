@@ -1,0 +1,1846 @@
+<!doctype html>
+<!--
+  LYDIANA IMAGINATION SOLUTIONS — scroll-driven landing page
+  Visual language: the construction notation of a coiled basket — coil rows,
+  stitch ticks, and a count that builds a vessel one row at a time.
+  Sequence: 104 frames rendered from the cooperative's own craft photography.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f1a17">
+  <meta name="description" content="Lydiana Imagination Solutions is a women-led basket weaving cooperative in Malawi — fair wages, design training, cooperative ownership and indigenous tree preservation.">
+  <title>Lydiana Imagination Solutions — Woven by Women</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* palette sampled from the cooperative's own logo, deck and craft photography */
+      --ink: #0f1a17;
+      --ink-soft: #16241f;
+      --forest: #1d5750;
+      --forest-deep: #123a35;
+      --gold: #c0912f;
+      --cream: #f4f1e8;
+      --sisal: #d9c7a6;
+      --husk: #a89272;
+      --bark: #5a4432;
+      --terracotta: #a85b3c;
+      --leaf: #6f8a3f;
+
+      --display: "Archivo", "Helvetica Neue", Arial, system-ui, sans-serif;
+      --data: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
+      --gutter: clamp(20px, 4.2vw, 72px);
+      --ease-out: cubic-bezier(.22, 1, .36, 1);
+      --line: rgba(244, 241, 232, .17);
+      --line-dark: rgba(15, 26, 23, .18);
+      --frame-progress: 0;
+      --title-wdth: 82;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      background: var(--ink);
+      color: var(--cream);
+      font-family: var(--display);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--ink);
+      color: var(--cream);
+      overflow-x: clip;
+    }
+
+    body.is-loading { overflow: hidden; }
+
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    :focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .sr-only:focus-visible {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      z-index: 1200;
+      width: auto;
+      height: auto;
+      margin: 0;
+      padding: 12px 16px;
+      overflow: visible;
+      clip: auto;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--data);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    /* ---------- shared type roles ---------- */
+
+    .micro {
+      font-family: var(--data);
+      font-size: 10px;
+      font-weight: 500;
+      line-height: 1.5;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    /* the stitch rule: a hairline punctuated by the short dark ticks that
+       interrupt every coil on the cooperative's checkerboard baskets */
+    .stitch-rule {
+      position: relative;
+      height: 3px;
+      border: 0;
+      margin: 0;
+      background:
+        linear-gradient(var(--stitch-line, var(--line-dark)), var(--stitch-line, var(--line-dark))) 0 1px / 100% 1px no-repeat,
+        repeating-linear-gradient(90deg,
+          var(--stitch-tick, var(--gold)) 0 4px,
+          transparent 4px 22px);
+    }
+
+    /* ---------- loader ---------- */
+
+    .loader {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      padding: max(24px, env(safe-area-inset-top)) var(--gutter) max(24px, env(safe-area-inset-bottom));
+      background: var(--ink);
+      transition: clip-path 900ms var(--ease-out), visibility 900ms;
+      clip-path: inset(0 0 0 0);
+    }
+
+    .loader.is-done { clip-path: inset(0 0 100% 0); visibility: hidden; }
+
+    .loader__mark {
+      align-self: center;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 24px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 18px;
+    }
+
+    .loader__number {
+      margin: 0;
+      font-size: clamp(64px, 15vw, 220px);
+      font-weight: 780;
+      font-variation-settings: "wdth" 78;
+      letter-spacing: -.07em;
+      line-height: .78;
+      text-transform: uppercase;
+    }
+
+    .loader__number em { font-style: normal; color: var(--gold); }
+
+    .loader__meta { text-align: right; color: var(--sisal); }
+
+    .loader__foot {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 18px;
+      padding-top: 22px;
+    }
+
+    .loader__track,
+    .telemetry__track {
+      position: relative;
+      height: 3px;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(244, 241, 232, .26), rgba(244, 241, 232, .26)) 0 1px / 100% 1px no-repeat;
+    }
+
+    .loader__fill,
+    .telemetry__fill {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(90deg, var(--gold) 0 4px, rgba(192, 145, 47, .25) 4px 11px);
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+
+    /* ---------- header ---------- */
+
+    .site-header {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 90;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 20px;
+      min-height: 70px;
+      padding: max(16px, env(safe-area-inset-top)) var(--gutter) 12px;
+      color: var(--cream);
+      text-shadow: 0 1px 14px rgba(15, 26, 23, .9), 0 0 3px rgba(15, 26, 23, .7);
+      pointer-events: none;
+      transition: color 220ms ease;
+    }
+
+    /* the header sits over alternating light and dark bands — invert it on light */
+    .site-header::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      opacity: 0;
+      background: linear-gradient(180deg, rgba(244, 241, 232, .95) 0%, rgba(244, 241, 232, .72) 55%, rgba(244, 241, 232, 0) 100%);
+      transition: opacity 220ms ease;
+    }
+
+    .site-header.is-on-light { color: var(--ink); text-shadow: none; }
+    .site-header.is-on-light::before { opacity: 1; }
+    .site-header.is-on-light .site-header__center,
+    .site-header.is-on-light .site-header__end { color: rgba(15, 26, 23, .62); }
+
+    .site-header__brand {
+      justify-self: start;
+      display: grid;
+      grid-template-columns: auto auto;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 720;
+      letter-spacing: -.01em;
+      text-transform: uppercase;
+    }
+
+    /* the coil mark: three concentric rows, the way a basket base begins */
+    .coil-mark {
+      width: 18px;
+      height: 18px;
+      flex: none;
+    }
+
+    .site-header__center { color: rgba(244, 241, 232, .74); }
+    .site-header__end { justify-self: end; text-align: right; color: rgba(244, 241, 232, .74); }
+
+    /* ---------- the sequence ---------- */
+
+    .sequence {
+      position: relative;
+      height: 720vh;
+      background: var(--ink);
+    }
+
+    .stage {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      height: 100svh;
+      overflow: hidden;
+      background: var(--ink);
+      isolation: isolate;
+    }
+
+    #film-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .stage__scrim {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(90deg, rgba(15, 26, 23, .92) 0%, rgba(15, 26, 23, .62) 30%, rgba(15, 26, 23, .16) 56%, transparent 74%),
+        linear-gradient(0deg, rgba(15, 26, 23, .82) 0%, transparent 40%),
+        linear-gradient(180deg, rgba(15, 26, 23, .72) 0%, transparent 16%);
+      opacity: var(--scrim-opacity, .82);
+      transition: background 600ms ease, opacity 500ms ease;
+      pointer-events: none;
+    }
+
+    .stage--right .stage__scrim {
+      background:
+        linear-gradient(270deg, rgba(15, 26, 23, .92) 0%, rgba(15, 26, 23, .62) 30%, rgba(15, 26, 23, .16) 56%, transparent 74%),
+        linear-gradient(0deg, rgba(15, 26, 23, .82) 0%, transparent 40%),
+        linear-gradient(180deg, rgba(15, 26, 23, .72) 0%, transparent 16%);
+    }
+
+    .stage__grid {
+      position: absolute;
+      inset: 0 var(--gutter);
+      z-index: 2;
+      background-image: repeating-linear-gradient(
+        90deg,
+        transparent 0,
+        transparent calc(8.333% - 1px),
+        rgba(244, 241, 232, .07) calc(8.333% - 1px),
+        rgba(244, 241, 232, .07) 8.333%
+      );
+      mask-image: linear-gradient(180deg, transparent, black 14%, black 82%, transparent);
+      opacity: .5;
+      pointer-events: none;
+    }
+
+    .mobile-aperture { display: none; }
+
+    .chapters {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+    }
+
+    .chapter {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      align-content: center;
+      column-gap: clamp(10px, 1.2vw, 20px);
+      padding: 96px var(--gutter) 108px;
+      visibility: hidden;
+    }
+
+    .chapter.is-visible { visibility: visible; }
+
+    .chapter__copy { position: relative; align-self: center; }
+
+    .chapter__eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 22px;
+      color: var(--cream);
+      text-shadow: 0 1px 12px rgba(15, 26, 23, .85);
+    }
+
+    .chapter__eyebrow::before {
+      content: "";
+      width: 26px;
+      height: 2px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 650ms 100ms var(--ease-out);
+    }
+
+    .chapter.is-visible .chapter__eyebrow::before { transform: scaleX(1); }
+
+    .reveal { overflow: hidden; padding-bottom: .08em; }
+
+    .reveal > span {
+      display: block;
+      transform: translateY(112%);
+      transition: transform 760ms var(--ease-out);
+    }
+
+    .reveal:nth-child(3) > span { transition-delay: 90ms; }
+    .reveal:nth-child(4) > span { transition-delay: 160ms; }
+    .chapter.is-visible .reveal > span { transform: translateY(0); }
+
+    .chapter__title {
+      margin: 0;
+      font-size: clamp(50px, 7.6vw, 122px);
+      font-weight: 760;
+      font-variation-settings: "wdth" var(--title-wdth);
+      letter-spacing: -.062em;
+      line-height: .84;
+      text-transform: uppercase;
+      text-wrap: balance;
+      text-shadow: 0 2px 26px rgba(15, 26, 23, .5);
+    }
+
+    .chapter__deck {
+      max-width: 31rem;
+      margin: 26px 0 0;
+      font-size: clamp(17px, 1.5vw, 23px);
+      font-weight: 450;
+      line-height: 1.3;
+      letter-spacing: -.022em;
+      text-wrap: pretty;
+      text-shadow: 0 1px 16px rgba(15, 26, 23, .68);
+    }
+
+    .chapter__fact {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: baseline;
+      max-width: 30rem;
+      margin-top: 30px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      color: var(--sisal);
+      text-shadow: 0 1px 12px rgba(15, 26, 23, .7);
+    }
+
+    .chapter__fact span:first-child { color: var(--gold); }
+
+    .chapter--hero { align-content: end; }
+    .chapter--hero .chapter__copy { grid-column: 1 / 10; padding-bottom: 5vh; }
+    .chapter--hero .chapter__title { font-size: clamp(74px, 12.6vw, 208px); line-height: .78; }
+    .chapter--hero .chapter__deck { max-width: 27rem; }
+
+    .chapter--right .chapter__copy { grid-column: 7 / 13; }
+    .chapter--left .chapter__copy { grid-column: 1 / 7; }
+
+    .chapter--final {
+      align-content: end;
+      background: linear-gradient(0deg, rgba(15, 26, 23, .9), rgba(15, 26, 23, 0) 62%);
+    }
+
+    .chapter--final .chapter__copy {
+      grid-column: 1 / 13;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 32px;
+      padding-bottom: 3vh;
+    }
+
+    .chapter--final .chapter__title { max-width: 11ch; }
+
+    .cta {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      min-width: min(100%, 280px);
+      min-height: 54px;
+      padding: 0 18px;
+      border: 1px solid rgba(244, 241, 232, .56);
+      background: rgba(15, 26, 23, .3);
+      color: var(--cream);
+      font-family: var(--data);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 250ms ease, background 250ms ease, border-color 250ms ease;
+    }
+
+    .cta::after { content: "↓"; font-size: 15px; }
+    .cta:hover { background: var(--cream); border-color: var(--cream); color: var(--ink); }
+
+    .cta--gold { border-color: var(--gold); background: var(--gold); color: var(--ink); }
+    .cta--gold:hover { background: var(--forest); border-color: var(--forest); color: var(--cream); }
+    .cta--out::after { content: "↗"; }
+
+    /* ---------- the coil rail (signature device) ---------- */
+
+    .telemetry {
+      position: absolute;
+      inset: auto var(--gutter) max(18px, env(safe-area-inset-bottom));
+      z-index: 8;
+      display: grid;
+      grid-template-columns: auto minmax(100px, 1fr) auto auto;
+      align-items: center;
+      gap: 18px;
+      pointer-events: none;
+    }
+
+    .telemetry__fill { transform: scaleX(var(--frame-progress)); will-change: transform; }
+    .telemetry__chapter { min-width: 14ch; }
+    .telemetry__frame { color: var(--sisal); }
+
+    .scroll-cue {
+      display: inline-grid;
+      grid-template-columns: auto 18px;
+      align-items: center;
+      gap: 9px;
+      color: var(--cream);
+    }
+
+    .scroll-cue::after {
+      content: "";
+      width: 16px; height: 16px;
+      border-right: 1px solid currentColor;
+      border-bottom: 1px solid currentColor;
+      transform: rotate(45deg) translate(-3px, 3px);
+      animation: cue 1.8s ease-in-out infinite;
+    }
+
+    @keyframes cue {
+      0%, 100% { transform: rotate(45deg) translate(-3px, 3px); opacity: .35; }
+      50% { transform: rotate(45deg) translate(1px, 7px); opacity: 1; }
+    }
+
+    /* ---------- editorial (light) ---------- */
+
+    .editorial {
+      position: relative;
+      z-index: 10;
+      background: var(--cream);
+      color: var(--ink);
+    }
+
+    .band { padding: clamp(78px, 10vw, 150px) var(--gutter); scroll-margin-top: 78px; }
+    .band--tight { padding-top: clamp(62px, 7vw, 104px); }
+    .band--forest { background: var(--forest-deep); color: var(--cream); }
+    .band--ink { background: var(--ink); color: var(--cream); }
+
+    .band__head {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      align-items: end;
+      gap: 40px;
+      padding-bottom: 26px;
+    }
+
+    .band__label { margin: 0 0 18px; color: var(--forest); }
+    .band--forest .band__label, .band--ink .band__label { color: var(--gold); }
+
+    .band__title {
+      max-width: 14ch;
+      margin: 0;
+      font-size: clamp(42px, 6.4vw, 104px);
+      font-weight: 780;
+      font-variation-settings: "wdth" 86;
+      letter-spacing: -.062em;
+      line-height: .86;
+      text-transform: uppercase;
+      text-wrap: balance;
+    }
+
+    .band__aside {
+      justify-self: end;
+      max-width: 32rem;
+      margin: 0;
+      font-size: clamp(16px, 1.4vw, 21px);
+      line-height: 1.45;
+      letter-spacing: -.018em;
+    }
+
+    .prose {
+      max-width: 62ch;
+      font-size: clamp(16px, 1.25vw, 19px);
+      line-height: 1.62;
+    }
+
+    .prose p { margin: 0 0 1.05em; }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { font-weight: 640; }
+
+    /* story */
+
+    .story {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      align-items: start;
+      gap: clamp(32px, 5vw, 86px);
+      margin-top: clamp(40px, 5vw, 72px);
+    }
+
+    .story__figure { position: relative; margin: 0; }
+    .story__figure img { display: block; width: 100%; height: auto; }
+
+    .story__figure figcaption {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: 10px;
+      color: rgba(15, 26, 23, .6);
+    }
+
+    .quote {
+      margin: clamp(32px, 4vw, 56px) 0 0;
+      padding-left: 22px;
+      border-left: 2px solid var(--gold);
+    }
+
+    .quote p {
+      margin: 0;
+      font-size: clamp(21px, 2.1vw, 31px);
+      font-weight: 500;
+      line-height: 1.24;
+      letter-spacing: -.032em;
+      text-wrap: pretty;
+    }
+
+    .quote cite {
+      display: block;
+      margin-top: 14px;
+      font-family: var(--data);
+      font-size: 10px;
+      font-style: normal;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(15, 26, 23, .62);
+    }
+
+    .band--forest .quote cite, .band--ink .quote cite { color: var(--sisal); }
+
+    /* figure counters */
+
+    .figures {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: clamp(40px, 5vw, 70px);
+      background: rgba(244, 241, 232, .2);
+      border: 1px solid rgba(244, 241, 232, .2);
+    }
+
+    .figure {
+      padding: clamp(22px, 2.6vw, 34px) clamp(18px, 2vw, 28px);
+      background: var(--forest-deep);
+    }
+
+    .figure__value {
+      margin: 0;
+      font-size: clamp(38px, 4.6vw, 70px);
+      font-weight: 780;
+      font-variation-settings: "wdth" 80;
+      letter-spacing: -.055em;
+      line-height: .9;
+      color: var(--gold);
+    }
+
+    .figure__label {
+      margin: 14px 0 0;
+      font-size: clamp(14px, 1.05vw, 16px);
+      line-height: 1.35;
+      letter-spacing: -.012em;
+      color: var(--cream);
+    }
+
+    .sources {
+      margin: 26px 0 0;
+      color: rgba(244, 241, 232, .6);
+    }
+
+    /* commitments */
+
+    .commitments {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: clamp(40px, 5vw, 70px);
+      background: var(--line-dark);
+      border-top: 1px solid var(--line-dark);
+      border-left: 1px solid var(--line-dark);
+    }
+
+    .commitment {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 14px;
+      padding: clamp(26px, 3vw, 44px);
+      background: var(--cream);
+    }
+
+    .commitment__index { color: var(--gold); }
+
+    .commitment__title {
+      margin: 0;
+      font-size: clamp(23px, 2.2vw, 33px);
+      font-weight: 700;
+      font-variation-settings: "wdth" 92;
+      letter-spacing: -.038em;
+      line-height: 1.02;
+    }
+
+    .commitment__body {
+      margin: 0;
+      max-width: 34ch;
+      font-size: clamp(15px, 1.15vw, 17px);
+      line-height: 1.55;
+      color: rgba(15, 26, 23, .82);
+    }
+
+    .commitment--leaf .commitment__index { color: var(--leaf); }
+
+    /* craft gallery */
+
+    .craft {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: clamp(10px, 1.2vw, 20px);
+      margin-top: clamp(40px, 5vw, 70px);
+    }
+
+    .shot { position: relative; margin: 0; overflow: hidden; background: var(--ink-soft); }
+    .shot img {
+      display: block;
+      width: 100%;
+      height: auto;
+      transition: transform 900ms var(--ease-out);
+    }
+    .shot:hover img { transform: scale(1.02); }
+
+    .shot figcaption {
+      position: absolute;
+      inset: auto 0 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      background: linear-gradient(0deg, rgba(15, 26, 23, .88), rgba(15, 26, 23, 0));
+      color: var(--cream);
+    }
+
+    .shot--a { grid-column: 1 / 8; }
+    .shot--b { grid-column: 8 / 13; align-self: start; }
+    .shot--c { grid-column: 1 / 5; margin-top: 3vw; align-self: start; }
+    .shot--d { grid-column: 5 / 10; margin-top: 3vw; align-self: start; }
+    .shot--e { grid-column: 10 / 13; margin-top: 3vw; align-self: start; }
+
+    /* pitch video */
+
+    .pitch {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      align-items: start;
+      gap: clamp(28px, 4vw, 64px);
+      margin-top: clamp(40px, 5vw, 64px);
+    }
+
+    .pitch__frame {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border: 1px solid rgba(244, 241, 232, .24);
+      background: #000;
+    }
+
+    .pitch__frame iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .pitch__notes { display: grid; gap: 22px; align-content: start; }
+    .pitch__notes p { margin: 0; font-size: clamp(15px, 1.15vw, 17px); line-height: 1.55; color: rgba(244, 241, 232, .88); }
+    .pitch__chapters { margin: 0; padding: 0; list-style: none; display: grid; gap: 9px; }
+    .pitch__chapters li {
+      display: grid;
+      grid-template-columns: 4.5rem 1fr;
+      gap: 12px;
+      padding-top: 9px;
+      border-top: 1px solid rgba(244, 241, 232, .18);
+      color: rgba(244, 241, 232, .82);
+    }
+    .pitch__chapters span:first-child { color: var(--gold); }
+
+    /* people */
+
+    .people {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: clamp(14px, 1.8vw, 26px);
+      margin-top: clamp(40px, 5vw, 70px);
+    }
+
+    .person { margin: 0; }
+
+    .person__photo {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      background: var(--ink-soft);
+      filter: saturate(.94);
+    }
+
+    .person__photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    .person figcaption { padding-top: 14px; }
+
+    .person__name {
+      margin: 0;
+      font-size: clamp(18px, 1.5vw, 23px);
+      font-weight: 700;
+      font-variation-settings: "wdth" 92;
+      letter-spacing: -.032em;
+      line-height: 1.1;
+    }
+
+    .person__role {
+      margin: 7px 0 0;
+      font-size: 14px;
+      line-height: 1.4;
+      color: var(--forest);
+    }
+
+    .person__note { margin: 8px 0 0; color: rgba(15, 26, 23, .58); }
+
+    .band--ink .person__role { color: var(--gold); }
+    .band--ink .person__note { color: rgba(244, 241, 232, .6); }
+
+    /* makers strip */
+
+    .makers {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(14px, 1.8vw, 26px);
+      margin-top: clamp(40px, 5vw, 64px);
+    }
+
+    .makers figure { margin: 0; }
+    .makers .person__photo { aspect-ratio: 3 / 4; }
+    .makers figcaption { padding-top: 12px; color: rgba(244, 241, 232, .66); }
+
+    /* contact */
+
+    .contact {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      margin-top: clamp(40px, 5vw, 70px);
+      background: var(--line-dark);
+      border-top: 1px solid var(--line-dark);
+    }
+
+    .contact__block {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+      padding: clamp(26px, 3vw, 40px) clamp(20px, 2vw, 30px) clamp(26px, 3vw, 40px) 0;
+      background: var(--cream);
+    }
+
+    .contact__label { margin: 0; color: var(--forest); }
+
+    .contact__value {
+      margin: 0;
+      font-size: clamp(19px, 1.7vw, 26px);
+      font-weight: 620;
+      font-variation-settings: "wdth" 92;
+      letter-spacing: -.034em;
+      line-height: 1.25;
+    }
+
+    .contact__value a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      text-decoration-color: rgba(15, 26, 23, .3);
+      text-underline-offset: 5px;
+      transition: color 200ms ease;
+    }
+
+    .contact__value a:hover { color: var(--terracotta); }
+
+    /* closing */
+
+    .close {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: clamp(28px, 4vw, 60px);
+    }
+
+    .close__title {
+      max-width: 15ch;
+      margin: 0;
+      font-size: clamp(44px, 7.4vw, 124px);
+      font-weight: 790;
+      font-variation-settings: "wdth" 84;
+      letter-spacing: -.068em;
+      line-height: .84;
+      text-transform: uppercase;
+    }
+
+    .close__actions { display: grid; gap: 12px; justify-items: stretch; }
+
+    .site-footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      padding: 40px var(--gutter) max(40px, env(safe-area-inset-bottom));
+      border-top: 1px solid var(--line);
+      background: var(--ink);
+      color: rgba(244, 241, 232, .62);
+    }
+
+    .site-footer p { margin: 0; max-width: 54rem; }
+
+    /* ---------- mobile ---------- */
+
+    @media (max-width: 880px) {
+      .story { grid-template-columns: 1fr; }
+      .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .people { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .pitch { grid-template-columns: 1fr; }
+      .contact { grid-template-columns: 1fr; }
+      .contact__block { padding-right: 0; }
+    }
+
+    @media (max-width: 780px) {
+      :root { --gutter: 20px; }
+
+      .site-header { grid-template-columns: 1fr auto; min-height: 54px; gap: 12px; }
+      .site-header__center { display: none; }
+      .site-header__brand { font-size: 11px; max-width: 20ch; }
+      .site-header__brand .coil-mark { width: 15px; height: 15px; }
+      .site-header__end br { display: none; }
+      .site-header__end .header-est { display: none; }
+
+      .sequence { height: 640vh; }
+
+      .stage__scrim,
+      .stage--right .stage__scrim {
+        background:
+          linear-gradient(180deg, rgba(15, 26, 23, .72), transparent 19%),
+          linear-gradient(0deg, rgba(15, 26, 23, .94) 0%, rgba(15, 26, 23, .55) 26%, transparent 44%);
+      }
+
+      .stage__grid { opacity: .28; }
+
+      /* letterboxed aperture: the 16:9 film sits in a marked window,
+         the way a finished panel sits inside its coil border */
+      .mobile-aperture {
+        position: absolute;
+        z-index: 3;
+        top: calc(33% - 28.125vw);
+        left: 0;
+        display: block;
+        width: 100%;
+        height: 56.25vw;
+        border-top: 1px solid rgba(244, 241, 232, .22);
+        border-bottom: 1px solid rgba(244, 241, 232, .22);
+        pointer-events: none;
+      }
+
+      .chapter {
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        align-content: end;
+        padding: 72px var(--gutter) 104px;
+      }
+
+      .chapter__copy,
+      .chapter--hero .chapter__copy,
+      .chapter--right .chapter__copy,
+      .chapter--left .chapter__copy,
+      .chapter--final .chapter__copy { grid-column: 1 / 7; }
+
+      .chapter__eyebrow { margin-bottom: 14px; }
+      .chapter__title { font-size: clamp(44px, 13vw, 72px); line-height: .88; }
+      .chapter__deck { max-width: 24rem; margin-top: 14px; font-size: 16px; }
+      .chapter__fact { margin-top: 16px; }
+
+      .chapter--hero .chapter__copy { padding-bottom: 0; }
+      .chapter--hero .chapter__title { font-size: clamp(62px, 20vw, 108px); }
+      .chapter--hero .chapter__deck { max-width: 19rem; }
+
+      .chapter--final .chapter__copy { display: block; }
+      .chapter--final .chapter__title { max-width: 9ch; }
+      .chapter--final .cta { margin-top: 20px; }
+
+      .telemetry { grid-template-columns: auto 1fr auto; gap: 12px; }
+      .telemetry__chapter { min-width: 9ch; }
+      .scroll-cue { display: none; }
+
+      .loader__mark { display: block; }
+      .loader__number { font-size: 26vw; }
+      .loader__meta { margin-top: 20px; text-align: left; }
+
+      .band__head { grid-template-columns: 1fr; }
+      .band__title { font-size: 13vw; max-width: 100%; }
+      .band__aside { justify-self: start; }
+
+      .commitments { grid-template-columns: 1fr; }
+      .figures { grid-template-columns: 1fr; }
+
+      .craft { grid-template-columns: repeat(6, 1fr); }
+      .shot--a { grid-column: 1 / 7; }
+      .shot--b { grid-column: 1 / 5; margin-top: 4vw; }
+      .shot--c { grid-column: 1 / 5; margin-top: 4vw; }
+      .shot--d { grid-column: 1 / 7; margin-top: 4vw; }
+      .shot--e { grid-column: 1 / 5; margin-top: 4vw; }
+
+      .makers { grid-template-columns: 1fr 1fr; }
+      .makers figure:last-child { grid-column: 1 / 3; }
+
+      .close { grid-template-columns: 1fr; align-items: start; }
+      .close__title { font-size: 13vw; }
+      .site-footer { grid-template-columns: 1fr; }
+    }
+
+    /* keep the team as a two-up grid down to 320 — four full-width portraits
+       turn the section into an unreadable scroll */
+    @media (max-width: 780px) {
+      .people { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .person__role { font-size: 13px; }
+    }
+
+    @media (max-width: 400px) {
+      .makers { grid-template-columns: 1fr; }
+      .makers figure:last-child { grid-column: auto; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+      .sequence { height: 100svh; }
+      .chapter:not(.chapter--hero) { display: none; }
+      .chapter--hero { visibility: visible; }
+      .chapter--hero .reveal > span { transform: translateY(0); }
+      .chapter--hero .chapter__eyebrow::before { transform: scaleX(1); }
+      .telemetry { display: none; }
+      .shot:hover img { transform: none; }
+    }
+  </style>
+</head>
+<body class="is-loading">
+  <div class="loader" id="loader" aria-label="Loading the image sequence">
+    <div class="loader__mark">
+      <p class="loader__number" aria-hidden="true">LYDIANA<br><em>IMAGINATION</em></p>
+      <div class="loader__meta micro">Women-led basket<br>weaving cooperative<br>Malawi</div>
+    </div>
+    <div class="loader__foot">
+      <span class="micro" id="loader-label">Setting the first coil</span>
+      <div class="loader__track" aria-hidden="true"><span class="loader__fill" id="loader-fill"></span></div>
+      <span class="micro" id="loader-count">000%</span>
+    </div>
+  </div>
+
+  <a class="sr-only" href="#story">Skip the scroll animation and go to the story</a>
+
+  <header class="site-header" aria-label="Brand and location">
+    <div class="site-header__brand">
+      <svg class="coil-mark" viewBox="0 0 18 18" aria-hidden="true" fill="none">
+        <circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.1"/>
+        <circle cx="9" cy="9" r="5" stroke="currentColor" stroke-width="1.1"/>
+        <circle cx="9" cy="9" r="2" stroke="currentColor" stroke-width="1.1"/>
+      </svg>
+      <span>Lydiana Imagination Solutions</span>
+    </div>
+    <div class="site-header__center micro">Women-led basket weaving cooperative</div>
+    <div class="site-header__end micro">Malawi<br><span class="header-est">Est. by Lydia Figuereido</span></div>
+  </header>
+
+  <main>
+    <section class="sequence" id="sequence" aria-label="Scroll-controlled film of the cooperative's work">
+      <div class="stage" id="stage">
+        <canvas id="film-canvas" role="img" aria-label="Weavers of the Lydiana cooperative and the coiled baskets they make; the image changes as the page scrolls"></canvas>
+        <div class="stage__scrim" aria-hidden="true"></div>
+        <div class="stage__grid" aria-hidden="true"></div>
+        <div class="mobile-aperture" aria-hidden="true"></div>
+
+        <div class="chapters" aria-live="off">
+          <article class="chapter chapter--hero" data-center="0.045" data-window="0.082" data-label="Woven by women" data-side="left">
+            <div class="chapter__copy">
+              <p class="chapter__eyebrow micro">Lydiana Imagination Solutions — Malawi</p>
+              <h1 class="chapter__title reveal"><span>Woven by women</span></h1>
+              <p class="chapter__deck reveal"><span>A weaver-owned cooperative rebuilding what a Malawian basket is worth.</span></p>
+            </div>
+          </article>
+
+          <article class="chapter chapter--left" data-center="0.215" data-window="0.068" data-label="The gap" data-side="left">
+            <div class="chapter__copy">
+              <p class="chapter__eyebrow micro">The gap — why we exist</p>
+              <h2 class="chapter__title reveal"><span>$48 a month</span></h2>
+              <p class="chapter__deck reveal"><span>What a weaver earns for work that fills every hour of daylight. Middlemen hold the market. The maker holds no bargaining power.</span></p>
+              <div class="chapter__fact micro"><span>01</span><span>200,000+ weavers affected in Malawi — 3M+ across Africa</span></div>
+            </div>
+          </article>
+
+          <article class="chapter chapter--right" data-center="0.39" data-window="0.068" data-label="The model" data-side="right">
+            <div class="chapter__copy">
+              <p class="chapter__eyebrow micro">The model</p>
+              <h2 class="chapter__title reveal"><span>She owns a share</span></h2>
+              <p class="chapter__deck reveal"><span>Fair pay, design training and direct market access — inside a cooperative the weavers themselves own.</span></p>
+              <div class="chapter__fact micro"><span>02</span><span>Weaver → cooperative → quality control → client. No middlemen.</span></div>
+            </div>
+          </article>
+
+          <article class="chapter chapter--left" data-center="0.565" data-window="0.068" data-label="The founder" data-side="left">
+            <div class="chapter__copy">
+              <p class="chapter__eyebrow micro">The founder</p>
+              <h2 class="chapter__title reveal"><span>Lydia Figuereido</span></h2>
+              <p class="chapter__deck reveal"><span>“We offer them fair wages, design training and cooperative ownership.”</span></p>
+              <div class="chapter__fact micro"><span>03</span><span>Founder &amp; CEO — BSc Psychology, 3+ years civic leadership</span></div>
+            </div>
+          </article>
+
+          <article class="chapter chapter--right" data-center="0.742" data-window="0.068" data-label="The cooperative" data-side="right">
+            <div class="chapter__copy">
+              <p class="chapter__eyebrow micro">The cooperative</p>
+              <h2 class="chapter__title reveal"><span>A team, not a supply chain</span></h2>
+              <p class="chapter__deck reveal"><span>Weavers, quality control, sales and strategy — a Malawian team building a business that belongs to its makers.</span></p>
+              <div class="chapter__fact micro"><span>04</span><span>Leadership, production quality, sales and strategy — all Malawian</span></div>
+            </div>
+          </article>
+
+          <article class="chapter chapter--final" data-center="0.925" data-window="0.072" data-label="Work with us" data-side="left">
+            <div class="chapter__copy">
+              <div>
+                <p class="chapter__eyebrow micro">Every coil is someone's income</p>
+                <h2 class="chapter__title reveal"><span>Order. Partner. Back the weavers.</span></h2>
+              </div>
+              <a class="cta" href="#contact">Get in touch</a>
+            </div>
+          </article>
+        </div>
+
+        <div class="telemetry" aria-hidden="true">
+          <span class="telemetry__chapter micro" id="telemetry-chapter">Woven by women</span>
+          <div class="telemetry__track"><span class="telemetry__fill"></span></div>
+          <span class="telemetry__frame micro" id="telemetry-frame">Coil 001 / 104</span>
+          <span class="scroll-cue micro">Scroll to weave</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="editorial">
+
+      <!-- ── story ─────────────────────────────────────────────── -->
+      <section class="band" id="story" aria-labelledby="story-title">
+        <div class="band__head">
+          <div>
+            <p class="band__label micro">Our story</p>
+            <h2 class="band__title" id="story-title">A basket is a wage</h2>
+          </div>
+          <p class="band__aside">Lydiana Imagination Solutions is a women-led basket weaving cooperative based in Malawi, founded by Lydia Figuereido.</p>
+        </div>
+        <hr class="stitch-rule">
+
+        <div class="story">
+          <div class="prose">
+            <p>Malawi's coiled baskets are among the finest handwork in the region. The women who make them are the people who earn least from them. A weaver can fill every hour of daylight and still take home about <strong>$48 a month</strong>, because the market between her and the buyer is held by middlemen.</p>
+            <p>The cooperative was built to close that distance. It buys directly from its weavers and pays them fairly. It trains them in design and colour — including the coloured dyes Malawian weavers have not had access to. And it gives them ownership: the women who weave the baskets hold a share of the business that sells them.</p>
+            <p>Alongside the weaving, the cooperative works in biodiversity — specifically the preservation of indigenous trees, the living material this craft depends on.</p>
+
+            <blockquote class="quote">
+              <p>“So my business is a cooperative for women basket weavers. We offer them fair wages, design training and cooperative ownership.”</p>
+              <cite>Lydia Figuereido — Founder &amp; CEO</cite>
+            </blockquote>
+          </div>
+
+          <figure class="story__figure">
+            <img src="img/weaver-hampers.webp" alt="A weaver standing beside two large coiled lidded hampers in a garden in Malawi" width="1350" height="1800" loading="lazy" decoding="async">
+            <figcaption class="micro"><span>Finished lidded hampers</span><span>Malawi</span></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ── the gap ───────────────────────────────────────────── -->
+      <section class="band band--forest" aria-labelledby="gap-title">
+        <div class="band__head">
+          <div>
+            <p class="band__label micro">The gap</p>
+            <h2 class="band__title" id="gap-title">The $48 problem</h2>
+          </div>
+          <p class="band__aside">The weaving is world class. The economics around it are not. These are the numbers the cooperative was built to change.</p>
+        </div>
+        <hr class="stitch-rule" style="--stitch-line: rgba(244,241,232,.24); --stitch-tick: var(--gold);">
+
+        <div class="figures">
+          <div class="figure">
+            <p class="figure__value">$48</p>
+            <p class="figure__label">Typical monthly earnings for a Malawian weaver working full daylight hours</p>
+          </div>
+          <div class="figure">
+            <p class="figure__value">$5M+</p>
+            <p class="figure__label">Crafts market controlled by middlemen, leaving weavers with zero bargaining power</p>
+          </div>
+          <div class="figure">
+            <p class="figure__value">200,000+</p>
+            <p class="figure__label">Weavers affected in Malawi</p>
+          </div>
+          <div class="figure">
+            <p class="figure__value">3M+</p>
+            <p class="figure__label">Weavers affected across Africa</p>
+          </div>
+        </div>
+        <p class="sources micro">Figures as cited by the cooperative — World Bank Report on Africa, 2022; Expert Market Research, 2025</p>
+      </section>
+
+      <!-- ── what we do ────────────────────────────────────────── -->
+      <section class="band" id="mission" aria-labelledby="mission-title">
+        <div class="band__head">
+          <div>
+            <p class="band__label micro">What we do</p>
+            <h2 class="band__title" id="mission-title">Four commitments</h2>
+          </div>
+          <p class="band__aside">A weaver-owned cooperative built on fair pay, training, ownership and the trees the craft depends on.</p>
+        </div>
+        <hr class="stitch-rule">
+
+        <div class="commitments">
+          <article class="commitment">
+            <p class="commitment__index micro">01</p>
+            <h3 class="commitment__title">Fair wages</h3>
+            <p class="commitment__body">Weavers are paid directly and fairly for every piece, instead of being squeezed by a chain of middlemen who set the price.</p>
+          </article>
+          <article class="commitment">
+            <p class="commitment__index micro">02</p>
+            <h3 class="commitment__title">Design training</h3>
+            <p class="commitment__body">Training in design and colour — including the coloured dyes Malawian weavers have not had access to — so the work can meet international taste without losing its own language.</p>
+          </article>
+          <article class="commitment">
+            <p class="commitment__index micro">03</p>
+            <h3 class="commitment__title">Cooperative ownership</h3>
+            <p class="commitment__body">Members hold a share of the business. The women who weave the baskets own the company that sells them, and share in what it earns.</p>
+          </article>
+          <article class="commitment commitment--leaf">
+            <p class="commitment__index micro">04</p>
+            <h3 class="commitment__title">Indigenous tree preservation</h3>
+            <p class="commitment__body">The cooperative works in biodiversity alongside weaving, with a focus on preserving the indigenous trees this craft grows out of.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ── craft ─────────────────────────────────────────────── -->
+      <section class="band band--tight" id="craft" aria-labelledby="craft-title">
+        <div class="band__head">
+          <div>
+            <p class="band__label micro">Craftsmanship</p>
+            <h2 class="band__title" id="craft-title">Made one coil at a time</h2>
+          </div>
+          <p class="band__aside">Lidded hampers, serving and wall plates, conical storage baskets and woven hats — coiled by hand, checked by the cooperative before they ship.</p>
+        </div>
+        <hr class="stitch-rule">
+
+        <div class="craft">
+          <figure class="shot shot--a">
+            <img src="img/weaver-lifting.webp" alt="A weaver lifting a tall coiled hamper with a checkerboard pattern" width="1350" height="1800" loading="lazy" decoding="async">
+            <figcaption class="micro"><span>Lidded hamper — checkerboard coil</span><span>01</span></figcaption>
+          </figure>
+          <figure class="shot shot--b">
+            <img src="img/craft-plate.webp" alt="A weaver holding a large woven serving plate with a two-tone radial pattern" width="561" height="980" loading="lazy" decoding="async">
+            <figcaption class="micro"><span>Serving &amp; wall plate</span><span>02</span></figcaption>
+          </figure>
+          <figure class="shot shot--c">
+            <img src="img/product-lidded-pair.webp" alt="A pair of conical lidded storage baskets woven in cream and rose" width="540" height="720" loading="lazy" decoding="async">
+            <figcaption class="micro"><span>Conical storage pair</span><span>03</span></figcaption>
+          </figure>
+          <figure class="shot shot--d">
+            <img src="img/weaver-workshop.webp" alt="A weaver at the workshop with a finished basket and a woven hat, stacked work behind her" width="1022" height="1280" loading="lazy" decoding="async">
+            <figcaption class="micro"><span>Workshop — basket and hat</span><span>04</span></figcaption>
+          </figure>
+          <figure class="shot shot--e">
+            <img src="img/weaver-coiling.webp" alt="A weaver seated on the ground coiling palm fibre into a new basket" width="416" height="345" loading="lazy" decoding="async">
+            <figcaption class="micro"><span>Coiling by hand</span><span>05</span></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ── pitch video ───────────────────────────────────────── -->
+      <section class="band band--ink" id="pitch" aria-labelledby="pitch-title">
+        <div class="band__head">
+          <div>
+            <p class="band__label micro">In her own words</p>
+            <h2 class="band__title" id="pitch-title">Lydia presents the case</h2>
+          </div>
+          <p class="band__aside">The founder's full investor pitch — the gap, the model, the traction and what the cooperative is asking for. Under three minutes.</p>
+        </div>
+        <hr class="stitch-rule" style="--stitch-line: rgba(244,241,232,.2); --stitch-tick: var(--gold);">
+
+        <div class="pitch">
+          <div class="pitch__frame">
+            <iframe
+              src="https://drive.google.com/file/d/18QL5Fi4puIPaJ4UsSi_EriSiqlp6MVmD/preview"
+              title="Investor pitch by Lydia Figuereido, founder of Lydiana Imagination Solutions"
+              allow="autoplay; fullscreen"
+              allowfullscreen
+              loading="lazy"></iframe>
+          </div>
+          <div class="pitch__notes">
+            <p>Lydia Figuereido presents Lydiana Imagination Solutions herself: why a weaver earning $48 a month is a market failure rather than a fact of life, and how a weaver-owned cooperative changes it.</p>
+            <ul class="pitch__chapters micro">
+              <li><span>00:10</span><span>The problem — meet Mphatso</span></li>
+              <li><span>00:46</span><span>The solution — a weaver-owned cooperative</span></li>
+              <li><span>01:08</span><span>Traction to date</span></li>
+              <li><span>01:36</span><span>How the business works</span></li>
+              <li><span>02:19</span><span>The team</span></li>
+              <li><span>02:26</span><span>The ask</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── traction ──────────────────────────────────────────── -->
+      <section class="band" id="impact" aria-labelledby="impact-title">
+        <div class="band__head">
+          <div>
+            <p class="band__label micro">Impact so far</p>
+            <h2 class="band__title" id="impact-title">What has changed</h2>
+          </div>
+          <p class="band__aside">Early, real and verifiable. These are the cooperative's own achieved milestones — not projections.</p>
+        </div>
+        <hr class="stitch-rule">
+
+        <div class="commitments">
+          <article class="commitment">
+            <p class="commitment__index micro">Milestone</p>
+            <h3 class="commitment__title">11 weavers recruited</h3>
+            <p class="commitment__body">Eleven women are now working through the cooperative rather than through middlemen.</p>
+          </article>
+          <article class="commitment">
+            <p class="commitment__index micro">Milestone</p>
+            <h3 class="commitment__title">Pay up 125%</h3>
+            <p class="commitment__body">Weavers' pay has more than doubled since joining — the single number this business exists to move.</p>
+          </article>
+          <article class="commitment">
+            <p class="commitment__index micro">Milestone</p>
+            <h3 class="commitment__title">50 baskets sold</h3>
+            <p class="commitment__body">Sold directly online and to business buyers, with quality control and packaging handled by the cooperative.</p>
+          </article>
+          <article class="commitment">
+            <p class="commitment__index micro">Route to market</p>
+            <h3 class="commitment__title">Weaver → cooperative → client</h3>
+            <p class="commitment__body">Direct online sales to individuals, wholesale to hotels, lodges and corporate gift companies. No layer in between taking the margin.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ── the makers ────────────────────────────────────────── -->
+      <section class="band band--ink" aria-labelledby="makers-title">
+        <div class="band__head">
+          <div>
+            <p class="band__label micro">The women</p>
+            <h2 class="band__title" id="makers-title">Whose hands these are</h2>
+          </div>
+          <p class="band__aside">Every basket carries a name, a household and a week of someone's work. The cooperative exists so that those three things are paid for properly.</p>
+        </div>
+        <hr class="stitch-rule" style="--stitch-line: rgba(244,241,232,.2); --stitch-tick: var(--gold);">
+
+        <div class="makers">
+          <figure>
+            <div class="person__photo"><img src="img/weaver-coiling.webp" alt="A weaver seated outdoors, coiling palm fibre into the base of a new basket" loading="lazy" decoding="async"></div>
+            <figcaption class="micro">Coiling the base — the first rows set the shape of everything above them</figcaption>
+          </figure>
+          <figure>
+            <div class="person__photo"><img src="img/weaver-workshop.webp" alt="A weaver at the workshop holding a finished basket and a woven hat" loading="lazy" decoding="async"></div>
+            <figcaption class="micro">At the workshop with finished work, ready for quality control</figcaption>
+          </figure>
+          <figure>
+            <div class="person__photo"><img src="img/weaver-hampers.webp" alt="A weaver with two completed lidded hampers in a garden" loading="lazy" decoding="async"></div>
+            <figcaption class="micro">Two completed hampers — roughly a fortnight of coiling</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ── team ──────────────────────────────────────────────── -->
+      <section class="band" id="team" aria-labelledby="team-title">
+        <div class="band__head">
+          <div>
+            <p class="band__label micro">The team</p>
+            <h2 class="band__title" id="team-title">Who runs it</h2>
+          </div>
+          <p class="band__aside">A small Malawian team covering leadership, production quality, sales and strategy.</p>
+        </div>
+        <hr class="stitch-rule">
+
+        <div class="people">
+          <figure class="person">
+            <div class="person__photo"><img src="img/team-lydia.webp" alt="Portrait of Lydia Figuereido" loading="lazy" decoding="async"></div>
+            <figcaption>
+              <h3 class="person__name">Lydia Figuereido</h3>
+              <p class="person__role">Founder &amp; CEO</p>
+              <p class="person__note micro">BSc Psychology · 3+ years civic leadership</p>
+            </figcaption>
+          </figure>
+          <figure class="person">
+            <div class="person__photo"><img src="img/team-olivia.webp" alt="Portrait of Olivia Anthony" loading="lazy" decoding="async"></div>
+            <figcaption>
+              <h3 class="person__name">Olivia Anthony</h3>
+              <p class="person__role">Production &amp; Quality Control Manager</p>
+              <p class="person__note micro">Dip Accounting · 5 years quality assurance</p>
+            </figcaption>
+          </figure>
+          <figure class="person">
+            <div class="person__photo"><img src="img/team-innocent.webp" alt="Portrait of Innocent Mtanga" loading="lazy" decoding="async"></div>
+            <figcaption>
+              <h3 class="person__name">Innocent Mtanga</h3>
+              <p class="person__role">Customer Acquisition &amp; Sales Manager</p>
+              <p class="person__note micro">10+ years sales experience</p>
+            </figcaption>
+          </figure>
+          <figure class="person">
+            <div class="person__photo"><img src="img/team-dalitso.webp" alt="Portrait of Dalitso Mbendera" loading="lazy" decoding="async"></div>
+            <figcaption>
+              <h3 class="person__name">Dalitso Mbendera</h3>
+              <p class="person__role">Business Strategy Advisor</p>
+              <p class="person__note micro">6+ years national security &amp; public policy</p>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ── why it matters ────────────────────────────────────── -->
+      <section class="band band--forest" aria-labelledby="why-title">
+        <div class="band__head">
+          <div>
+            <p class="band__label micro">Why it matters</p>
+            <h2 class="band__title" id="why-title">A basket outlives the hands that made it</h2>
+          </div>
+        </div>
+        <hr class="stitch-rule" style="--stitch-line: rgba(244,241,232,.24); --stitch-tick: var(--gold);">
+
+        <div class="prose" style="margin-top: clamp(32px, 4vw, 56px); color: rgba(244,241,232,.9);">
+          <p>Coiled basketry in Malawi is passed down, not taught in a classroom. A woman learns it from the woman before her, and the pattern she chooses is a piece of a place. That knowledge is not at risk because people stopped caring about it. It is at risk because it stopped paying.</p>
+          <p>When a weaver earns what her work is worth, three things follow at once: a household gets a reliable income, a craft keeps its next generation, and the trees the craft depends on become worth protecting rather than clearing. That is the whole argument for this cooperative, and it is why ownership — not charity — is the part that matters.</p>
+          <p>Buying one basket is not a donation. It is the market working the way it should have in the first place.</p>
+        </div>
+      </section>
+
+      <!-- ── contact ───────────────────────────────────────────── -->
+      <section class="band" id="contact" aria-labelledby="contact-title">
+        <div class="band__head">
+          <div>
+            <p class="band__label micro">Connect</p>
+            <h2 class="band__title" id="contact-title">Talk to the cooperative</h2>
+          </div>
+          <p class="band__aside">For orders, wholesale enquiries, partnerships or support — reach Lydia and the team directly in Malawi.</p>
+        </div>
+        <hr class="stitch-rule">
+
+        <div class="contact">
+          <div class="contact__block">
+            <p class="contact__label micro">Phone</p>
+            <p class="contact__value"><a href="tel:+265992872818">+265 992 872 818</a></p>
+            <p class="contact__value"><a href="tel:+265894578737">+265 894 578 737</a></p>
+          </div>
+          <div class="contact__block">
+            <p class="contact__label micro">Email</p>
+            <p class="contact__value"><a href="mailto:lydiafiguereido4@gmail.com">lydiafiguereido4@gmail.com</a></p>
+          </div>
+          <div class="contact__block">
+            <p class="contact__label micro">Post</p>
+            <p class="contact__value">P.O. Box 51210<br>Malawi</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── final call ────────────────────────────────────────── -->
+      <section class="band band--ink" aria-labelledby="close-title">
+        <div class="close">
+          <div>
+            <p class="band__label micro">Work with us</p>
+            <h2 class="close__title" id="close-title">Every order is a wage.</h2>
+          </div>
+          <div class="close__actions">
+            <a class="cta cta--gold cta--out" href="mailto:lydiafiguereido4@gmail.com?subject=Lydiana%20Imagination%20Solutions%20enquiry">Email the cooperative</a>
+            <a class="cta cta--out" href="tel:+265992872818">Call +265 992 872 818</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer micro">
+    <p>Lydiana Imagination Solutions — women-led basket weaving cooperative, Malawi. Photography and figures supplied by the cooperative; market figures as cited in its own materials (World Bank Report on Africa 2022; Expert Market Research 2025).</p>
+    <a href="#story">Back to the story ↑</a>
+  </footer>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const FRAME_COUNT = 104;
+      const FRAME_PAD = 4;
+      const LERP_FACTOR = 0.115;
+      const DWELL_WIDTH = 0.038;
+      const DWELL_PEAK = 2.75;
+      const LUT_SIZE = 2400;
+      const MOBILE_QUERY = "(max-width: 780px)";
+      const REDUCED_QUERY = "(prefers-reduced-motion: reduce)";
+      const DWELL_CENTERS = [0.045, 0.215, 0.39, 0.565, 0.742, 0.925];
+
+      const sequence = document.getElementById("sequence");
+      const stage = document.getElementById("stage");
+      const canvas = document.getElementById("film-canvas");
+      const ctx = canvas.getContext("2d", { alpha: false, desynchronized: true });
+      const loader = document.getElementById("loader");
+      const loaderFill = document.getElementById("loader-fill");
+      const loaderCount = document.getElementById("loader-count");
+      const loaderLabel = document.getElementById("loader-label");
+      const telemetryChapter = document.getElementById("telemetry-chapter");
+      const telemetryFrame = document.getElementById("telemetry-frame");
+      const chapters = Array.from(document.querySelectorAll(".chapter"));
+      const reducedMotion = window.matchMedia(REDUCED_QUERY).matches;
+      const mobileMedia = window.matchMedia(MOBILE_QUERY);
+      const frameStores = {
+        desktop: createFrameStore("frames/desktop"),
+        mobile: createFrameStore("frames/mobile")
+      };
+      const chapterVisibility = new WeakMap();
+      let useMobileFrames = mobileMedia.matches;
+      let activeStore = useMobileFrames ? frameStores.mobile : frameStores.desktop;
+      let currentFrame = 0;
+      let targetFrame = 0;
+      let lastDrawn = -1;
+      let lastSide = "";
+      let pageVisible = true;
+      let rafId = 0;
+      let sequenceTop = 0;
+      let sequenceDistance = 1;
+
+      function createFrameStore(directory) {
+        return {
+          directory,
+          images: new Array(FRAME_COUNT),
+          loaded: new Uint8Array(FRAME_COUNT),
+          promises: new Array(FRAME_COUNT)
+        };
+      }
+
+      function frameUrl(index, store = activeStore) {
+        return `${store.directory}/frame-${String(index + 1).padStart(FRAME_PAD, "0")}.webp`;
+      }
+
+      function setLoaderProgress(ratio) {
+        const safeRatio = Math.max(0, Math.min(1, ratio));
+        loaderFill.style.transform = `scaleX(${safeRatio})`;
+        loaderCount.textContent = `${String(Math.round(safeRatio * 100)).padStart(3, "0")}%`;
+      }
+
+      function loadFrame(index, store = activeStore, retries = 1) {
+        if (store.loaded[index]) return Promise.resolve(store.images[index]);
+        if (store.promises[index]) return store.promises[index];
+
+        store.promises[index] = new Promise((resolve) => {
+          const attempt = (remaining) => {
+            const image = new Image();
+            store.images[index] = image;
+            image.decoding = "async";
+            image.onload = () => {
+              store.loaded[index] = 1;
+              resolve(image);
+            };
+            image.onerror = () => {
+              if (remaining > 0) {
+                window.setTimeout(() => attempt(remaining - 1), 140);
+              } else {
+                store.images[index] = null;
+                store.promises[index] = null;
+                resolve(null);
+              }
+            };
+            image.src = frameUrl(index, store);
+          };
+          attempt(retries);
+        });
+        return store.promises[index];
+      }
+
+      async function loadInBatches(indices, size = 8, store = activeStore) {
+        for (let start = 0; start < indices.length; start += size) {
+          const batch = indices.slice(start, start + size);
+          await Promise.all(batch.map((index) => loadFrame(index, store)));
+        }
+      }
+
+      function nearestLoaded(index, store = activeStore) {
+        if (store.loaded[index]) return index;
+        for (let distance = 1; distance < FRAME_COUNT; distance += 1) {
+          const before = index - distance;
+          const after = index + distance;
+          if (before >= 0 && store.loaded[before]) return before;
+          if (after < FRAME_COUNT && store.loaded[after]) return after;
+        }
+        return -1;
+      }
+
+      function resizeCanvas() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const width = Math.round(stage.clientWidth * dpr);
+        const height = Math.round(stage.clientHeight * dpr);
+        if (canvas.width !== width || canvas.height !== height) {
+          canvas.width = width;
+          canvas.height = height;
+          lastDrawn = -1;
+        }
+      }
+
+      function updateSequenceMetrics() {
+        const rect = sequence.getBoundingClientRect();
+        sequenceTop = window.scrollY + rect.top;
+        sequenceDistance = Math.max(1, rect.height - window.innerHeight);
+      }
+
+      function drawFrame(index) {
+        const resolved = nearestLoaded(Math.max(0, Math.min(FRAME_COUNT - 1, index)));
+        if (resolved < 0 || resolved === lastDrawn) return;
+        const image = activeStore.images[resolved];
+        if (!image || !image.naturalWidth) return;
+
+        const width = canvas.width;
+        const height = canvas.height;
+        ctx.fillStyle = "#0f1a17";
+        ctx.fillRect(0, 0, width, height);
+
+        let scale;
+        let drawWidth;
+        let drawHeight;
+        let x;
+        let y;
+
+        if (useMobileFrames) {
+          scale = width / image.naturalWidth;
+          drawWidth = width;
+          drawHeight = image.naturalHeight * scale;
+          x = 0;
+          y = height * 0.33 - drawHeight / 2;
+        } else {
+          scale = Math.max(width / image.naturalWidth, height / image.naturalHeight);
+          drawWidth = image.naturalWidth * scale;
+          drawHeight = image.naturalHeight * scale;
+          x = (width - drawWidth) / 2;
+          y = (height - drawHeight) / 2;
+        }
+
+        ctx.drawImage(image, x, y, drawWidth, drawHeight);
+        lastDrawn = resolved;
+      }
+
+      const rawAtEffective = new Float64Array(LUT_SIZE + 1);
+
+      function buildDwellLut() {
+        let total = 0;
+        const density = new Float64Array(LUT_SIZE + 1);
+        for (let i = 0; i <= LUT_SIZE; i += 1) {
+          const effective = i / LUT_SIZE;
+          let value = 1;
+          for (const center of DWELL_CENTERS) {
+            const delta = (effective - center) / DWELL_WIDTH;
+            value += DWELL_PEAK * Math.exp(-0.5 * delta * delta);
+          }
+          density[i] = value;
+          if (i > 0) total += (density[i - 1] + value) * 0.5;
+          rawAtEffective[i] = total;
+        }
+        for (let i = 0; i <= LUT_SIZE; i += 1) rawAtEffective[i] /= total;
+      }
+
+      function remapProgress(raw) {
+        let low = 0;
+        let high = LUT_SIZE;
+        while (low < high) {
+          const mid = (low + high) >> 1;
+          if (rawAtEffective[mid] < raw) low = mid + 1;
+          else high = mid;
+        }
+        const index = Math.max(1, low);
+        const leftRaw = rawAtEffective[index - 1];
+        const rightRaw = rawAtEffective[index];
+        const span = rightRaw - leftRaw || 1;
+        const mix = (raw - leftRaw) / span;
+        return Math.max(0, Math.min(1, (index - 1 + mix) / LUT_SIZE));
+      }
+
+      function rawScrollProgress() {
+        return Math.max(0, Math.min(1, (window.scrollY - sequenceTop) / sequenceDistance));
+      }
+
+      function updateChapters(effective) {
+        let active = chapters[0];
+        let nearest = Infinity;
+        for (const chapter of chapters) {
+          const center = Number(chapter.dataset.center);
+          const windowSize = Number(chapter.dataset.window);
+          const distance = Math.abs(effective - center);
+          const visible = distance <= windowSize;
+          if (chapterVisibility.get(chapter) !== visible) {
+            chapterVisibility.set(chapter, visible);
+            chapter.classList.toggle("is-visible", visible);
+            chapter.setAttribute("aria-hidden", String(!visible));
+          }
+          if (distance < nearest) {
+            nearest = distance;
+            active = chapter;
+          }
+        }
+        if (telemetryChapter.textContent !== active.dataset.label) {
+          telemetryChapter.textContent = active.dataset.label;
+        }
+        // the scrim follows the copy, so the film is only darkened where text sits
+        const side = active.dataset.side || "left";
+        if (side !== lastSide) {
+          stage.classList.toggle("stage--right", side === "right");
+          lastSide = side;
+        }
+      }
+
+      function updateInterface(raw, effective, frame) {
+        document.documentElement.style.setProperty("--frame-progress", raw.toFixed(4));
+        document.documentElement.style.setProperty("--title-wdth", String(Math.round(78 + effective * 26)));
+        telemetryFrame.textContent = `Coil ${String(frame + 1).padStart(3, "0")} / ${FRAME_COUNT}`;
+        const edge = Math.min(effective, 1 - effective) / 0.08;
+        stage.style.setProperty("--scrim-opacity", String(Math.min(0.96, 0.76 + edge * 0.18)));
+      }
+
+      function dismissLoader() {
+        setLoaderProgress(1);
+        loader.classList.add("is-done");
+        document.body.classList.remove("is-loading");
+        window.setTimeout(() => loader.remove(), 1000);
+      }
+
+      function showLoadError() {
+        loaderLabel.textContent = "Images unavailable — reload the page";
+        loaderCount.textContent = "ERROR";
+        loaderCount.style.color = "var(--terracotta)";
+        loader.setAttribute("aria-label", "The sequence could not be loaded. Reload the page to try again.");
+      }
+
+      function renderReducedPoster(frame) {
+        currentFrame = frame;
+        targetFrame = frame;
+        drawFrame(frame);
+        chapters.forEach((chapter, index) => {
+          const visible = index === 0;
+          chapterVisibility.set(chapter, visible);
+          chapter.classList.toggle("is-visible", visible);
+          chapter.setAttribute("aria-hidden", String(!visible));
+        });
+      }
+
+      function tick() {
+        if (!pageVisible || reducedMotion) return;
+        const raw = rawScrollProgress();
+        const effective = remapProgress(raw);
+        targetFrame = Math.round(effective * (FRAME_COUNT - 1));
+        currentFrame += (targetFrame - currentFrame) * LERP_FACTOR;
+        const frame = Math.round(currentFrame);
+        drawFrame(frame);
+        updateChapters(effective);
+        updateInterface(raw, effective, frame);
+        rafId = requestAnimationFrame(tick);
+      }
+
+      async function init() {
+        buildDwellLut();
+        resizeCanvas();
+        updateSequenceMetrics();
+        setLoaderProgress(0.06);
+
+        if (reducedMotion) {
+          const posterFrame = Math.round(0.08 * (FRAME_COUNT - 1));
+          const poster = await loadFrame(posterFrame);
+          if (!poster) {
+            showLoadError();
+            return;
+          }
+          renderReducedPoster(posterFrame);
+          dismissLoader();
+          return;
+        }
+
+        const critical = Array.from(new Set([
+          0,
+          ...DWELL_CENTERS.map((center) => Math.round(center * (FRAME_COUNT - 1))),
+          FRAME_COUNT - 1
+        ])).sort((a, b) => a - b);
+
+        const firstFrame = await loadFrame(0);
+        if (firstFrame) {
+          drawFrame(0);
+          setLoaderProgress(0.28);
+        }
+
+        const criticalTail = critical.filter((index) => index !== 0);
+        let prepared = 0;
+        await Promise.all(criticalTail.map(async (index) => {
+          const image = await loadFrame(index);
+          prepared += 1;
+          setLoaderProgress(0.28 + 0.68 * (prepared / criticalTail.length));
+          return image;
+        }));
+
+        const readyFrame = nearestLoaded(0);
+        if (readyFrame < 0) {
+          showLoadError();
+          return;
+        }
+        drawFrame(readyFrame);
+        dismissLoader();
+        tick();
+
+        const remaining = Array.from({ length: FRAME_COUNT }, (_, index) => index)
+          .filter((index) => !critical.includes(index));
+        loadInBatches(remaining);
+      }
+
+      async function swapFrameSet(event) {
+        useMobileFrames = event.matches;
+        activeStore = useMobileFrames ? frameStores.mobile : frameStores.desktop;
+        lastDrawn = -1;
+        resizeCanvas();
+        updateSequenceMetrics();
+
+        const frame = Math.max(0, Math.min(FRAME_COUNT - 1, Math.round(currentFrame)));
+        const image = await loadFrame(frame, activeStore);
+        if (!image) return;
+        drawFrame(frame);
+
+        const byDistance = Array.from({ length: FRAME_COUNT }, (_, index) => index)
+          .sort((a, b) => Math.abs(a - frame) - Math.abs(b - frame));
+        loadInBatches(byDistance, 8, activeStore);
+      }
+
+      window.addEventListener("resize", () => {
+        resizeCanvas();
+        updateSequenceMetrics();
+      }, { passive: true });
+      mobileMedia.addEventListener("change", swapFrameSet);
+      document.addEventListener("visibilitychange", () => {
+        pageVisible = !document.hidden;
+        if (pageVisible && !reducedMotion) {
+          cancelAnimationFrame(rafId);
+          tick();
+        }
+      });
+
+      init();
+    })();
+
+    /* Header inversion: the page alternates dark film/forest bands with cream
+       editorial bands, so the fixed brand line has to follow whatever sits
+       under it. An IntersectionObserver with a header-height root margin fires
+       only for the band currently crossing the header, with no scroll reads. */
+    (() => {
+      "use strict";
+      const header = document.querySelector(".site-header");
+      const regions = Array.from(
+        document.querySelectorAll("#sequence, .band, .site-footer")
+      );
+      if (!header || !regions.length || !("IntersectionObserver" in window)) return;
+
+      const isDark = (el) =>
+        el.id === "sequence" ||
+        el.classList.contains("band--forest") ||
+        el.classList.contains("band--ink") ||
+        el.classList.contains("site-footer");
+
+      const observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          header.classList.toggle("is-on-light", !isDark(entry.target));
+        }
+      }, { rootMargin: "-46px 0px -100% 0px", threshold: 0 });
+
+      regions.forEach((region) => observer.observe(region));
+    })();
+  </script>
+</body>
+</html>
