@@ -564,6 +564,9 @@
       color: rgba(15, 26, 23, .6);
     }
 
+    .band--forest .story__figure figcaption,
+    .band--ink .story__figure figcaption { color: rgba(244, 241, 232, .62); }
+
     .quote {
       margin: clamp(32px, 4vw, 56px) 0 0;
       padding-left: 22px;
@@ -706,6 +709,7 @@
     .shot--c { grid-column: 1 / 5; margin-top: 3vw; align-self: start; }
     .shot--d { grid-column: 5 / 10; margin-top: 3vw; align-self: start; }
     .shot--e { grid-column: 10 / 13; margin-top: 3vw; align-self: start; }
+    .shot--f { grid-column: 1 / 7; margin-top: 3vw; align-self: start; }
 
     /* pitch video */
 
@@ -970,6 +974,7 @@
       .shot--c { grid-column: 1 / 5; margin-top: 4vw; }
       .shot--d { grid-column: 1 / 7; margin-top: 4vw; }
       .shot--e { grid-column: 1 / 5; margin-top: 4vw; }
+      .shot--f { grid-column: 1 / 7; margin-top: 4vw; }
 
       .makers { grid-template-columns: 1fr 1fr; }
       .makers figure:last-child { grid-column: 1 / 3; }
@@ -1239,6 +1244,35 @@
           <figure class="shot shot--e">
             <img src="img/weaver-coiling.webp" alt="A weaver seated on the ground coiling palm fibre into a new basket" width="416" height="345" loading="lazy" decoding="async">
             <figcaption class="micro"><span>Coiling by hand</span><span>05</span></figcaption>
+          </figure>
+          <figure class="shot shot--f">
+            <img src="img/product-checkerboard.webp" alt="A lidded coiled basket worked in a rose and natural checkerboard pattern, standing on grass" width="559" height="613" loading="lazy" decoding="async">
+            <figcaption class="micro"><span>Lidded basket — dyed checkerboard</span><span>06</span></figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <!-- ── where the work goes ───────────────────────────────── -->
+      <section class="band band--forest" id="placement" aria-labelledby="placement-title">
+        <div class="band__head">
+          <div>
+            <p class="band__label micro">Where the work goes</p>
+            <h2 class="band__title" id="placement-title">Onto the shelf</h2>
+          </div>
+          <p class="band__aside">Cooperative work on display in an art gallery in Malawi.</p>
+        </div>
+        <hr class="stitch-rule" style="--stitch-line: rgba(244,241,232,.24); --stitch-tick: var(--gold);">
+
+        <div class="story">
+          <div class="prose" style="color: rgba(244,241,232,.9);">
+            <p>The cooperative sells directly — online to individual buyers, and wholesale to galleries, hotels and lodges, and corporate gift buyers.</p>
+            <p>That route is the whole point. When a basket travels from the weaver to the cooperative to the shelf, with quality control and packaging handled in between, the margin that used to disappear into a chain of middlemen stays with the woman who coiled it.</p>
+            <p>Coiled plates, wall pieces and floor mats, shown the way they are meant to be seen.</p>
+          </div>
+
+          <figure class="story__figure">
+            <img src="img/gallery-display.webp" alt="An art gallery interior in Malawi with coiled woven plates and wall pieces displayed on shelves against an orange wall, beside a bookcase and woven floor mats" width="720" height="901" loading="lazy" decoding="async">
+            <figcaption class="micro"><span>On display — art gallery, Malawi</span><span>Cooperative work</span></figcaption>
           </figure>
         </div>
       </section>

@@ -18,7 +18,7 @@ index.html            the whole site (no build step, no dependencies)
 frames/desktop/       104 WebP frames, 1200x675   — 10.1 MB
 frames/mobile/        104 WebP frames, 680x383    —  4.1 MB
 frames/manifest.json  how the sequence was built
-img/                  11 photographs, web-optimised — 2.4 MB
+img/                  12 photographs, web-optimised — 2.3 MB
 ```
 
 ## Design thesis
@@ -71,9 +71,17 @@ Everything factual is traceable to Lydia's own materials. Nothing was invented.
 | Weaver → cooperative → QC & packaging → client; hotels, lodges, corporate gift partners | Pitch deck "Traction" |
 | Team names, roles and credentials | Pitch deck "The Team" |
 | Phone, email, P.O. Box | Lydia's WhatsApp messages |
+| Cooperative work on display in a Malawian art gallery ("Onto the shelf") | Photograph sent by Lydia, 19 Sep 2026 |
 
 Deliberately **left off**: revenue model, per-basket costs, margin, 3-year
 projections, funding allocation and ROI. Those are investor-deck material.
+
+## Pending from Lydia
+
+She is opening a **business email address** and will send it. When it arrives,
+replace `lydiafiguereido4@gmail.com` in the contact section, the closing CTA
+`mailto:` and the footer — three places in `index.html`. A business address will
+read considerably better to wholesale buyers than a personal Gmail.
 
 ## Two things to check with Lydia
 
@@ -92,7 +100,9 @@ projections, funding allocation and ROI. Those are investor-deck material.
   the brand text in `<header class="site-header">`.
 - **Photography.** Two photographs (`weaver-coiling` at 416x345, `craft-plate` at
   561x980) are low resolution and are used at small sizes only. Higher-resolution
-  product shots would lift the craft gallery considerably.
+  product shots would lift the craft gallery considerably. The gallery interior
+  (720x901) and the checkerboard basket (559x613) are adequate at the sizes used
+  but would not survive being enlarged.
 - The people in the garden photographs are captioned as cooperative weavers
   rather than named, because the source material does not identify them.
 
@@ -116,7 +126,7 @@ between the centres, so each chapter gets its own shot.
   legible over both film and cream bands, closing CTA reachable.
 - Mobile 375x812 and 320x720: no horizontal overflow, film sits in its letterboxed
   aperture, copy below it, team grid two-up at both widths.
-- No console errors; all 208 frames, 11 photographs and the manifest return 200.
+- No console errors; all 208 frames, 12 photographs and the manifest return 200.
 - One `<h1>`, ordered headings, every image has alt text, the iframe is titled,
   the skip link is visible on focus, touch targets are at least 44px.
 - `prefers-reduced-motion` renders a single poster frame with the hero chapter and
