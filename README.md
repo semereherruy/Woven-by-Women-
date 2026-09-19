@@ -106,6 +106,22 @@ read considerably better to wholesale buyers than a personal Gmail.
 - The people in the garden photographs are captioned as cooperative weavers
   rather than named, because the source material does not identify them.
 
+## African pattern system
+
+The decorative language is taken from the cooperative's own baskets rather than
+from generic African clip art, which keeps it authentic and specific:
+
+- **Woven band** (`--band-light` / `--band-dark`, inline SVG data URIs) replaces
+  the old hairline divider under every section head. Zigzag coil, triangle
+  stitch, dot course — the three motifs that actually appear on their work, in
+  gold, terracotta and teal/cream.
+- **Ambient coil** — an oversized concentric stitch course, masked back to a
+  watermark, sits top-right of every forest and ink band.
+- **Woven strip in the film**, just above the coil rail, so the hero carries the
+  same geometry as the editorial sections.
+- Palette gained `--ochre` and `--teal` to match the warmth of the reference
+  images, alongside the existing forest/gold/cream taken from the real logo.
+
 ## Note on the craft gallery
 
 `img/gallery-display.webp` is cropped to landscape on purpose. The portrait
@@ -113,10 +129,18 @@ original left a tall column of dead green beside the copy at desktop width. The
 crop keeps the woven wall pieces, the starburst plates and all three shelves of
 coiled plates — the part that carries the "this is art" argument.
 
-On phones the craft gallery is a two-up tile grid on a shared aspect ratio
-(`3/4`, with the opening and closing pieces full width at `4/3`). The earlier
-ragged single column left most of the screen empty. Tile captions drop their
-index number below 780px, where it only pushed the label onto a third line.
+The craft gallery is no longer rectangular tiles. The pieces are coiled circles,
+so a rectangular frame was always fighting the object inside it. Each piece now
+sits in a **coil disc**: the image clipped to a circle, ringed by two dashed SVG
+circles that reproduce the stitch course of a real coiled plate, hung at varying
+heights the way plates hang on the gallery wall in Lydia's photograph. The ring
+turns slowly on hover.
+
+Structure matters here: the ring is measured against `.disc__frame`, never the
+whole `<figure>`. Sizing it against the figure makes it swallow the caption.
+
+On phones the wall becomes two discs per row, keeping the alternating drop so it
+never flattens into a plain grid.
 
 ## Regenerating the sequence
 
