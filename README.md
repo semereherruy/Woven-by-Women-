@@ -18,7 +18,7 @@ index.html            the whole site (no build step, no dependencies)
 frames/desktop/       104 WebP frames, 1200x675   — 10.1 MB
 frames/mobile/        104 WebP frames, 680x383    —  4.1 MB
 frames/manifest.json  how the sequence was built
-img/                  12 photographs, web-optimised — 2.3 MB
+img/                  12 photographs, web-optimised — 2.2 MB
 ```
 
 ## Design thesis
@@ -71,7 +71,7 @@ Everything factual is traceable to Lydia's own materials. Nothing was invented.
 | Weaver → cooperative → QC & packaging → client; hotels, lodges, corporate gift partners | Pitch deck "Traction" |
 | Team names, roles and credentials | Pitch deck "The Team" |
 | Phone, email, P.O. Box | Lydia's WhatsApp messages |
-| Cooperative work on display in a Malawian art gallery ("Onto the shelf") | Photograph sent by Lydia, 19 Sep 2026 |
+| Cooperative work on display in a Malawian art gallery ("Art, not just storage") | Photograph sent by Lydia, 19 Sep 2026 |
 
 Deliberately **left off**: revenue model, per-basket costs, margin, 3-year
 projections, funding allocation and ROI. Those are investor-deck material.
@@ -106,6 +106,18 @@ read considerably better to wholesale buyers than a personal Gmail.
 - The people in the garden photographs are captioned as cooperative weavers
   rather than named, because the source material does not identify them.
 
+## Note on the craft gallery
+
+`img/gallery-display.webp` is cropped to landscape on purpose. The portrait
+original left a tall column of dead green beside the copy at desktop width. The
+crop keeps the woven wall pieces, the starburst plates and all three shelves of
+coiled plates — the part that carries the "this is art" argument.
+
+On phones the craft gallery is a two-up tile grid on a shared aspect ratio
+(`3/4`, with the opening and closing pieces full width at `4/3`). The earlier
+ragged single column left most of the screen empty. Tile captions drop their
+index number below 780px, where it only pushed the label onto a third line.
+
 ## Regenerating the sequence
 
 `render_seq.py` (kept alongside this README) rebuilds `frames/`. Edit the `SHOTS`
@@ -127,6 +139,8 @@ between the centres, so each chapter gets its own shot.
 - Mobile 375x812 and 320x720: no horizontal overflow, film sits in its letterboxed
   aperture, copy below it, team grid two-up at both widths.
 - No console errors; all 208 frames, 12 photographs and the manifest return 200.
+- Audited at 1440, 390 and 320: no horizontal overflow, no broken images, no image
+  displayed above 1.35x its natural width, every link at least 44px tall.
 - One `<h1>`, ordered headings, every image has alt text, the iframe is titled,
   the skip link is visible on focus, touch targets are at least 44px.
 - `prefers-reduced-motion` renders a single poster frame with the hero chapter and

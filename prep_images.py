@@ -18,11 +18,12 @@ JOBS = [
     ("weaver-coiling", "IMG_9230.JPG", None, 900),
     ("weaver-workshop", "IMG_9231.JPG", None, 1400),
     # product
-    ("product-lidded-pair", "IMG_9235.JPG", None, 1000),
-    # gallery placement — cooperative work on display in a Malawian art gallery
-    ("gallery-display", "LYDIA-gallery-display.jpg", None, 1100),
+    ("product-lidded-pair", "IMG_9235.JPG", (0, 96, 540, 720), 1000),
+    # gallery placement — cooperative work on display in a Malawian art gallery.
+    # Cropped to landscape: the portrait original left a dead column beside the copy.
+    ("gallery-display", "LYDIA-gallery-display.jpg", (0, 110, 720, 590), 1100),
     # product
-    ("product-checkerboard", "LYDIA-basket-pink-checkerboard.jpg", None, 900),
+    ("product-checkerboard", "LYDIA-basket-pink-checkerboard.jpg", (52, 22, 516, 600), 900),
     # team
     ("team-olivia", "IMG_9240.JPG", None, 1000),
     ("team-innocent", "IMG_9239.JPG", None, 900),
