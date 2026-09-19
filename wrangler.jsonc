@@ -1,0 +1,10 @@
+{
+  // Assets-only Worker: there is no Worker script, so "main" is deliberately
+  // omitted. The name must stay "woven-by-women" so a Git-triggered deploy
+  // updates the existing Worker instead of creating a second one.
+  "name": "woven-by-women",
+  "compatibility_date": "2026-09-19",
+  "assets": {
+    "directory": "./"
+  }
+}

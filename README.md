@@ -142,6 +142,32 @@ whole `<figure>`. Sizing it against the figure makes it swallow the caption.
 On phones the wall becomes two discs per row, keeping the alternating drop so it
 never flattens into a plain grid.
 
+## Deployment
+
+Live as a Cloudflare **Worker** (static assets, no Worker script):
+https://woven-by-women.semereherruy27.workers.dev/
+
+`wrangler.jsonc` declares it as an assets-only Worker — `main` is deliberately
+omitted. The `name` must stay `woven-by-women` so a Git-triggered deploy updates
+the existing Worker rather than creating a second one.
+
+`.assetsignore` keeps the README, the two Python scripts and the wrangler config
+out of the public upload. `_headers` is deliberately not listed there: Cloudflare
+reads it as configuration and does not serve it.
+
+To connect the repo for automatic deploys: Cloudflare dashboard → Workers & Pages
+→ `woven-by-women` → Settings → Build → connect `semereherruy/Woven-by-Women-`,
+production branch `main`, no build command, deploy command `npx wrangler deploy`.
+
+After any deploy, confirm it actually landed:
+
+```bash
+curl -s https://woven-by-women.semereherruy27.workers.dev/ | grep -c coil-wall
+```
+
+Anything above 0 means the current design is live. `0` means the deploy did not
+take — that exact check caught a live site four commits behind.
+
 ## Regenerating the sequence
 
 `render_seq.py` (kept alongside this README) rebuilds `frames/`. Edit the `SHOTS`

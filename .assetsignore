@@ -1,0 +1,10 @@
+# gitignore syntax — these are never uploaded as public assets.
+# _headers is deliberately NOT listed: Cloudflare reads it as config and
+# does not serve it.
+.git/
+.gitignore
+.assetsignore
+wrangler.jsonc
+README.md
+prep_images.py
+render_seq.py
