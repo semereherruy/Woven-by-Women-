@@ -1,0 +1,22 @@
+# Cloudflare Pages headers.
+#
+# The HTML is never cached by the browser, so a redeploy shows up immediately
+# instead of leaving people on a stale page. The frame sequence and photography
+# are cached for a week: long enough to matter for a ~14MB sequence, short
+# enough that re-rendered frames reaching the same filenames self-heal.
+
+/
+  Cache-Control: no-cache
+
+/index.html
+  Cache-Control: no-cache
+
+/frames/*
+  Cache-Control: public, max-age=604800
+
+/img/*
+  Cache-Control: public, max-age=604800
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
