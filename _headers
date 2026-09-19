@@ -1,4 +1,5 @@
-# Cloudflare Pages headers.
+# Cloudflare headers file. Read by both Workers Static Assets (this project,
+# deployed as a Worker) and by Pages, so it keeps working either way.
 #
 # The HTML is never cached by the browser, so a redeploy shows up immediately
 # instead of leaving people on a stale page. The frame sequence and photography
